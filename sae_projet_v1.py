@@ -10,7 +10,6 @@ with open('donnees_hebdo.csv',newline='') as csvfile:
 #print(Donnees)
 
 
-
 #Donnees de consommation corrigee en semaines pour chaque année (2025, 2024, 2023, 2022, 2021, 2020)
 
 semaine_2025=[]
@@ -59,6 +58,23 @@ plt.legend()
 plt.show()
 
 
+#Donnees conso corrigee en fonction des donnees conso brute des semaines
+
+conso_corrigee=[]
+for element in donnees_2023:
+    if element[0] =='semaine':
+        #print(element[6], element[10])
+        conso_corrigee.append(element[6])
+print(conso_corrigee)
+
+donnees_brute=[]
+for element in donnees_2023:
+    if element[0] =='semaine' and element[10] != 'NA':
+        #print(element[6], element[10])
+        donnees_brute.append(element[10])
+print(donnees_brute)
+
+#Affichage des deux courbes sur le même graphiue 
 
 
 

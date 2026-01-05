@@ -1,5 +1,4 @@
 import csv
-from collections import defaultdict
 import matplotlib.pyplot as plt
 
 Donnees=[]
@@ -10,72 +9,54 @@ with open('donnees_hebdo.csv',newline='') as csvfile:
         Donnees.append(row)
 #print(Donnees)
 
-#Donnees semaine 2025
 
-donnees_conso_jour=[]
+
+#Donnees de consommation corrigee en semaines pour chaque année (2025, 2024, 2023, 2022, 2021, 2020)
+
+semaine_2025=[]
 for element in Donnees:
-    if element[0] == 'jour' and element[4] == '2025':
-        #print(element[0],element[2], element[6])
-        donnees_conso_jour.append(float(element[6].replace(",", ".")))
-#print(donnees_conso_jour)
+    if element[0] == 'semaine' and element[4] == '2025' and element[6] != "NA":
+        semaine_2025.append(float(element[6].replace(",", ".")))  # Convertir en float
 
-"""
-"""
-#Donnees de consommation corrigee en semaines
-
-semaine_conso_2025=[]
+semaine_2024=[]
 for element in Donnees:
-    if element[0] == 'semaine' and element[4] == '2025':
-        #print(element[0], element[1], element[2], element[6], element[4])
-        #print(element[0:])
-        semaine_conso_2025.append(float(element[6].replace(",", ".")))
-#print(semaine_conso_2025)
+    if element[0] == 'semaine' and element[4] == '2024' and element[6] != "NA":
+        semaine_2024.append(float(element[6].replace(",", ".")))
 
-"""
-
-
-
-semaine_conso_2024=[]
+semaine_2023=[]
 for element in Donnees:
-    if element[0] == 'semaine' and element[4] == '2024':
-        #print(element[0], element[1], element[2], element[6], element[4])
-        semaine_conso_2024.append(float(element[6].replace(",", ".")))
-        #print(element[0:])
-print(semaine_conso_2024)
+    if element[0] == 'semaine' and element[4] == '2023' and element[6] != "NA":
+        semaine_2023.append(float(element[6].replace(",", ".")))
 
-"""
-
-semaine_conso_2023=[]
+semaine_2022=[]
 for element in Donnees:
-    if element[0] == 'semaine' and element[4] == '2023':
-        #print(element[0:])
-        semaine_conso_2023.append(float(element[6].replace(",", ".")))
-#print(semaine_conso_2023)
+    if element[0] == 'semaine' and element[4] == '2022' and element[6] != "NA":
+        semaine_2022.append(float(element[6].replace(",", ".")))
 
-
-semaine_conso_2022=[]
+semaine_2021=[]
 for element in Donnees:
-    if element[0] == 'semaine' and element[4] == '2022':
-        #print(element[0:])
-        semaine_conso_2022.append(float(element[6].replace(",", ".")))
-print(semaine_conso_2022)
+    if element[0] == 'semaine' and element[4] == '2021' and element[6] != "NA":
+        semaine_2021.append(float(element[6].replace(",", ".")))
 
-
-semaine_conso_2021=[]
+semaine_2020=[]
 for element in Donnees:
-    if element[0] == 'semaine' and element[4] == '2021':
-        #print(element[0:])
-        semaine_conso_2021.append(float(element[6].replace(",", ".")))
-#print(semaine_conso_2021)
-
-semaine_conso_2020=[]
-for element in Donnees:
-    if element[0] == 'semaine' and element[4] == '2020':
-        #print(element[0:])
-        semaine_conso_2020.append(float(element[6].replace(",", ".")))
-#print(semaine_conso_2020)
+    if element[0] == 'semaine' and element[4] == '2020' and element[6] != "NA":
+        semaine_2020.append(float(element[6].replace(",", ".")))
 
 
+plt.plot(range(1, len(semaine_2025)+1), semaine_2025, marker="o", label="2025")
+#plt.plot(range(1, len(semaine_2024)+1), semaine_2024, marker="o", label="2024")
+#plt.plot(range(1, len(semaine_2023)+1), semaine_2023, marker="o", label="2023")
+#plt.plot(range(1, len(semaine_2022)+1), semaine_2022, marker="o", label="2022")
+#plt.plot(range(1, len(semaine_2021)+1), semaine_2021, marker="o", label="2021")
+#plt.plot(range(1, len(semaine_2020)+1), semaine_2020, marker="o", label="2020")
+
+plt.xlabel("Semaine de l'année")
+plt.ylabel("Consommation corrigée")
+plt.title("Évolution hebdomadaire de la consommation (2020 - 2025)")
+plt.grid(True)
+plt.legend()
+plt.show()
 
 
 

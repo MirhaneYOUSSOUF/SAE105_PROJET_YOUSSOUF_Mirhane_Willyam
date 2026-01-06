@@ -13,7 +13,7 @@ with open('donnees_hebdo.csv',newline='') as csvfile:
 #Donnees de consommation corrigee en semaines pour chaque année (2025, 2024, 2023, 2022, 2021, 2020)
 
 semaine_2025=[]
-for element in Donnees:
+for element in Donnees: 
     if element[0] == 'semaine' and element[4] == '2025' and element[6] != "NA":
         semaine_2025.append(float(element[6].replace(",", ".")))  # Convertir en float
 
@@ -58,29 +58,232 @@ plt.legend()
 plt.show()
 
 
+#Consommation brute 2025 - 2020
+
+# Conso brute 2025
+donnees_brute2025 = {}
+for element in Donnees:
+    if element[0] == 'semaine' and element[4] == '2025':
+        semaine = element[3]
+        conso_brute1 = element[10]
+        if conso_brute1 == 'NA':
+            valeur = None
+        else:
+            valeur = float(conso_brute1.replace(",", "."))
+        donnees_brute2025[semaine] = valeur
+#print(donnees_brute2025)
+
+# conso brute 2024
+donnees_brute2024 = {}
+for element in Donnees:
+    if element[0] == 'semaine' and element[4] == '2024':
+        semaine = element[3]
+        conso_brute2 = element[10]
+        if conso_brute2 == 'NA':
+            valeur = None
+        else:
+            valeur = float(conso_brute2.replace(",", "."))
+        donnees_brute2024[semaine] = valeur
+#print(donnees_brute2024)
+
+# Conso brute 2023
+donnees_brute2023 = {}
+for element in Donnees:
+    if element[0] == 'semaine' and element[4] == '2023':
+        semaine = element[3]
+        conso_brute3 = element[10]
+        if conso_brute3 == 'NA':
+            valeur = None
+        else:
+            valeur = float(conso_brute3.replace(",", "."))
+        donnees_brute2023[semaine] = valeur
+#print(donnees_brute2023)
+
+# Conso brute 2022
+donnees_brute2022 = {}
+for element in Donnees:
+    if element[0] == 'semaine' and element[4] == '2022':
+        semaine = element[3]
+        conso_brute4 = element[10]
+        if conso_brute4 == 'NA':
+            valeur = None
+        else:
+            valeur = float(conso_brute4.replace(",", "."))
+        donnees_brute2022[semaine] = valeur
+#print(donnees_brute2022)
+
+# Conso brute 2021
+donnees_brute2021 = {}
+for element in Donnees:
+    if element[0] == 'semaine' and element[4] == '2021':
+        semaine = element[3]
+        conso_brute5 = element[10]
+        if conso_brute5 == 'NA':
+            valeur = None
+        else:
+            valeur = float(conso_brute5.replace(",", "."))
+        donnees_brute2021[semaine] = valeur
+#print(donnees_brute2021)
+
+#conso brute 2020
+donnees_brute2020 = {}
+for element in Donnees:
+    if element[0] == 'semaine' and element[4] == '2020':
+        semaine = element[3]
+        conso_brute6 = element[10]
+        if conso_brute6 == 'NA':
+            valeur = None
+        else:
+            valeur = float(conso_brute6.replace(",", "."))
+        donnees_brute2020[semaine] = valeur
+#print(donnees_brute2020)
+
+
+import matplotlib.pyplot as plt
+
+# Regrouper les données brutes dans un seul dictionnaire
+donnees_brutes = {
+    "2025": donnees_brute2025,
+    "2024": donnees_brute2024,
+    "2023": donnees_brute2023,
+    "2022": donnees_brute2022,
+    "2021": donnees_brute2021,
+    "2020": donnees_brute2020
+}
+
+plt.figure(figsize=(12,6))
+
+for annee, data_brute in donnees_brutes.items():
+    semaines = []
+    valeurs_valides = []
+
+    for i, val in data_brute.items():
+        try:
+            semaine_int = int(i)
+            if val is not None:
+                semaines.append(semaine_int)
+                valeurs_valides.append(val)
+        except:
+            pass
+
+    semaines_valeurs = sorted(zip(semaines, valeurs_valides))
+    if semaines_valeurs:
+        semaines, valeurs_valides = zip(*semaines_valeurs)
+        plt.plot(semaines, valeurs_valides, marker="o", label=annee)
+
+plt.xlabel("Semaine de l'année")
+plt.ylabel("Consommation brute")
+plt.title("Consommation brute hebdomadaire (2020 - 2025)")
+plt.grid(True)
+plt.legend()
+plt.xticks(range(1, 54, 2))
+plt.tight_layout()
+plt.show()
+
+
 #Donnees conso corrigee en fonction des donnees conso brute des semaines
 
-conso_corrigee=[]
-for element in donnees_2023:
-    if element[0] =='semaine':
-        #print(element[6], element[10])
-        conso_corrigee.append(element[6])
-print(conso_corrigee)
+import matplotlib.pyplot as plt
 
-donnees_brute=[]
-for element in donnees_2023:
-    if element[0] =='semaine' and element[10] != 'NA':
-        #print(element[6], element[10])
-        donnees_brute.append(element[10])
-print(donnees_brute)
+# Regrouper toutes les données corrigées et brutes par année
+donnees_corrigees = {
+    "2025": semaine_2025,
+    "2024": semaine_2024,
+    "2023": semaine_2023,
+    "2022": semaine_2022,
+    "2021": semaine_2021,
+    "2020": semaine_2020
+}
 
-#Affichage des deux courbes sur le même graphiue 
+donnees_brutes = {
+    "2025": donnees_brute2025,
+    "2024": donnees_brute2024,
+    "2023": donnees_brute2023,
+    "2022": donnees_brute2022,
+    "2021": donnees_brute2021,
+    "2020": donnees_brute2020
+}
+
+plt.figure(figsize=(14,7))
+
+for annee in ["2025","2024","2023","2022","2021","2020"]: 
+
+    #Courbe pour les données corrigées
+    data_corrigee = donnees_corrigees[annee]
+    plt.plot(range(1, len(data_corrigee)+1), data_corrigee,marker="x", linestyle='--', label=f"Corrigée {annee}")
+    #Courbe pour les données brutes
+    data_brute = donnees_brutes[annee] 
+    # Trier les semaines 
+    semaines_valides2 = []
+    valeurs_valides2 = []
+    for s, val in data_brute.items():
+        try:
+            s_int = int(s)
+            if val is not None:
+                semaines_valides2.append(s_int)
+                valeurs_valides2.append(val)
+        except:
+            pass
+    # Trier maintenant par semaine
+    if semaines_valides2:
+        semaines_valides2, valeurs_valides2 = zip(*sorted(zip(semaines_valides2, valeurs_valides2)))
+        plt.plot(semaines_valides2, valeurs_valides2,marker="o", linestyle='-', label=f"Brute {annee}")
+
+#Affichage de la courbe
+plt.xlabel("Semaine de l'année")
+plt.ylabel("Consommation")
+plt.title("Comparaison consommation brute vs corrigée (2020 - 2025)")
+plt.grid(True)
+plt.legend(bbox_to_anchor=(1.05,1), loc='upper left')
+plt.xticks(range(1, 54, 2))
+plt.tight_layout()
+plt.show()
 
 
 
+#La moyenne des consommations corrigées et brutes
+
+import matplotlib.pyplot as plt
+
+# toutes les semaines corrigées dans une liste
+donnees_corrigees = [semaine_2025, semaine_2024, semaine_2023, semaine_2022, semaine_2021, semaine_2020]
+# Nombre maximum de semaines
+nb_semaines = max(len(s) for s in donnees_corrigees)
+
+moyenne_corrigee = []
+for i in range(nb_semaines):
+    valeurs_semaine = []
+    for data in donnees_corrigees:
+        if i < len(data):  # Vérifie si l'année a cette semaine
+            valeurs_semaine.append(data[i])
+    moyenne_corrigee.append(np.mean(valeurs_semaine))
+
+donnees_brutes = [donnees_brute2025, donnees_brute2024, donnees_brute2023,donnees_brute2022, donnees_brute2021, donnees_brute2020]
+# Nombre maximum de semaines
+nb_semaines = max(len(data) for data in donnees_brutes)
+
+moyenne_brute = []
+for s in range(1, nb_semaines+1):
+    valeurs_semaine = []
+    for data in donnees_brutes:
+        if s in data and data[s] is not None:
+            valeurs_semaine.append(data[s])
+    moyenne_brute.append(np.mean(valeurs_semaine))
 
 
+import matplotlib.pyplot as plt
+plt.figure(figsize=(12,6))
+plt.plot(range(1, len(moyenne_corrigee)+1), moyenne_corrigee, marker='x', linestyle='--', color='blue', label="Moyenne corrigée")
+plt.plot(range(1, len(moyenne_brute)+1), moyenne_brute, marker='o', linestyle='-', color='red', label="Moyenne brute")
 
+plt.xlabel("Semaine de l'année")
+plt.ylabel("Consommation")
+plt.title("Consommation moyenne brute vs corrigée")
+plt.grid(True)
+plt.legend()
+plt.xticks(range(1, 54, 2))
+plt.tight_layout()
+plt.show()
 
 
 

@@ -188,3 +188,86 @@ plt.title("Évolution hebdomadaire de la consommation (2020 - 2025)")
 plt.grid(True)
 plt.legend()
 plt.show()
+
+import csv
+import matplotlib.pyplot as plt
+
+ 
+Donnees=[]
+with open('_C3_89volution_de_la_consommation_hebdomadaire_2025-12-18_13-41.csv',newline='') as csvfile:
+    reader=csv.reader(csvfile,delimiter=',')
+    for row in reader:
+        #print(','.join(row))
+        Donnees.append(row)
+#print(Donnees)
+
+entetes = Donnees[0]
+
+idx_maille = entetes.index("maille")
+idx_jour_semaine = entetes.index("jour_semaine")
+
+lignes_semaine = [] 
+
+
+
+for ligne in Donnees[1:]: 
+	maille = ligne[idx_maille] 
+	jour_semaine = ligne[idx_jour_semaine] 
+	# On garde uniquement les données journalières 
+	if maille != 'jour':
+		continue 
+	if "_" not in jour_semaine:
+		continue
+	# Récupération du numéro après "_" 
+	numero_jour = jour_semaine.split("_")[1] 
+	# Jours de semaine : 1 à 5 
+	if numero_jour in ["1", "2", "3", "4", "5"]: 
+		lignes_semaine.append(ligne) 
+#print(lignes_semaine)
+		
+#Donnees1=[]
+#with open('_C3_89volution_de_la_consommation_hebdomadaire_2025-12-18_13-41.csv',newline='') as csvfile:
+#    reader=csv.reader(csvfile,delimiter=',')
+#    for row in reader:
+#        print(','.join(row))
+#        Donnees1.append(row)
+#print(Donnees1)
+#print(Donnees1[1][4])
+
+
+#del Donnees1[0]
+#print(Donnees1)
+
+
+#semaine5_2025=[]
+#for element in semaine5_2025:
+#    if element[0] == 'jour' and element[4] == '2025' and element[6] != 'NA':
+#        semaine5_2025.append(float(element[6].replace(',', '.')))  #Convertir en float
+
+#for element in lignes_semaine:
+#    for i in range(6, len(element), 2):
+#        if element[i] != 'NA' and ligne[i] != '':
+#            semaine5_2025.append(float(element[i]))      
+#print(semaine5_2025)
+
+
+semaine5_2025=[]
+for element in lignes_semaine:
+    if element[0] == 'jour' and element[4] == '2025' and element[6] != 'NA':
+        semaine5_2025.append(float(element[6].replace(',', '.')))  #Convertir en float
+print(semaine5_2025)
+
+plt.plot(range(1, len(semaine5_2025)+1), semaine5_2025, marker='o', label='2025')
+
+#plt.plot(range(1, len(jour_2024)+1), jour_2024, marker='o', label='2024')
+#plt.plot(range(1, len(jour_2023)+1), jour_2023, marker='o', label='2023')
+#plt.plot(range(1, len(jour_2022)+1), jour_2022, marker='o', label='2022')
+#plt.plot(range(1, len(jour_2021)+1), jour_2021, marker='o', label="2021")
+#plt.plot(range(1, len(jour_2020)+1), jour_2020, marker='o', label='2020')
+
+plt.xlabel("Lundi-Vendredi de l'année")
+plt.ylabel("Consommation corrigée")
+plt.title("Évolution hebdomadaire de la consommation de lundi à vendredi (2020 - 2025)")
+plt.grid(True)
+plt.legend()
+plt.show()

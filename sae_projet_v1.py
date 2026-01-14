@@ -687,6 +687,75 @@ plt.grid(axis='y')
 plt.show()
 
 
+#Analyse des températures par saison, au fil des années.
+
+import csv
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+temperatures = []
+with open('Temperature.csv', newline='') as csvfile:
+    reader = csv.reader(csvfile, delimiter=';')
+    for row in reader:
+        temperatures.append(row)
+
+# Liste des années (2014 à 2025)
+annees = [str(a) for a in range(2014, 2025)]
+
+
+saisons = {
+    "Hiver": ["12", "01", "02"],  #Décembre, Janvier, Février
+    "Printemps": ["03", "04", "05"],  #Mars, Avril, Mai
+    "Été": ["06", "07", "08"],  #Juin, Juillet, Août
+    "Automne": ["09", "10", "11"]  #Septembre, Octobre, Novembre
+}
+
+# Dictionnaire pour stocker les moyennes de température par saison et annee
+moyennes_temperatures_saisons = {saison: [] for saison in saisons}
+
+#Calcul de la température moyenne par saison et par année
+for annee in annees:
+    for saison, mois in saisons.items():
+        total_temperature = 0
+        count = 0
+        for element in temperatures[1:]: 
+            date = element[0]
+            a, m, d = date.split("/")  # On sépare l'année, mois, jour
+            if a == annee and m in mois:  
+                temp = element[2].replace(",", ".")  #température
+                if temp :  # vérifier que la température n'est pas vide
+                    try:
+                        total_temperature += float(temp)  # On convertir en float
+                        count += 1
+                    except ValueError:
+                        pass  #Si la conversion échoue, on l'ignore
+        if count > 0:
+            moyennes_temperatures_saisons[saison].append(total_temperature / count)  # Moyenne par saison et par année
+        else:
+            moyennes_temperatures_saisons[saison].append(0)
+
+#Tracer les barres pour chaque saison
+fig, ax = plt.subplots(figsize=(12, 6))
+# Positionnement des barres pour chaque saison
+bar_width = 0.2  # Largeur des barres
+index = np.arange(len(annees))  #années sur l'axe X
+
+# Création des barres pour chaque saison
+colors = ['skyblue', 'lightgreen', 'orange', 'lightcoral']  # Couleurs pour chaque saison
+for i, (saison, temperatures_saison) in enumerate(moyennes_temperatures_saisons.items()):
+    ax.bar(index + i * bar_width, temperatures_saison, bar_width, label=saison, color=colors[i])
+
+ax.set_title("Températures moyennes par saison (2014-2025)")
+ax.set_xlabel("Année")
+ax.set_ylabel("Température moyenne (°C)")
+ax.set_xticks(index + 1.5 * bar_width)# Positionner les années sous les barres
+ax.set_xticklabels(annees, rotation=45)
+ax.grid(True, axis='y')
+ax.legend(title="Saison")
+# Affichage du graphique
+plt.tight_layout()
+plt.show()
 
 
 

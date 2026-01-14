@@ -349,6 +349,345 @@ plt.show()
 
 
 
+#Consommation saisonnière (2018-2024)
+
+import csv
+import matplotlib.pyplot as plt
+
+donnees=[]
+with open('Evolution_brute_corrigee.csv',newline='') as csvfile:
+    reader=csv.reader(csvfile,delimiter=';')
+    for row in reader:
+#        print(','.join(row))
+        donnees.append(row)
+#print(donnees)
+
+
+dates_hiver = []
+hiver_2024 = []
+
+for element in donnees[1:]:
+    date = element[0]
+    annee, mois = date.split("-")
+    if annee == "2024" and mois in ["12", "01", "02"]:
+        dates_hiver.append(date)
+        hiver_2024.append(float(element[2].replace(",", ".")))
+
+plt.figure(figsize=(8,4))
+plt.plot(dates_hiver, hiver_2024, marker='o', linestyle='-')
+plt.title("Consommation hivernale 2024")
+plt.xlabel("Date")
+plt.ylabel("Valeur")
+plt.grid(True)
+plt.show()
+
+
+
+#Consommation par saison en 2024
+
+import matplotlib.pyplot as plt
+#hiver2024
+dates_hiver = []
+hiver_2024 = []
+
+# On parcourt toutes les données
+for mois in ["12", "01", "02"]:  #Par ordre
+    for element in donnees[1:]:
+        date = element[0]
+        annee, m = date.split("-")
+        if annee == "2024" and m == mois:
+            dates_hiver.append(date)
+            hiver_2024.append(float(element[2].replace(",", ".")))
+
+plt.figure(figsize=(8,4))
+plt.bar(dates_hiver, hiver_2024, color='skyblue')
+plt.title("Consommation hivernale 2024")
+plt.xlabel("Mois")
+plt.ylabel("Valeur (TWh)")
+plt.grid(axis='y') #grille verticale
+plt.show()
+
+
+
+#Printemps2024
+import matplotlib.pyplot as plt
+
+dates_printemps = []
+printemps_2024 = []
+
+for mois in ["03", "04", "05"]:  # ordre croissant
+    for element in donnees[1:]:
+        date = element[0]
+        annee, m = date.split("-")
+        if annee == "2024" and m == mois:
+            dates_printemps.append(date)
+            printemps_2024.append(float(element[2].replace(",", ".")))
+
+plt.figure(figsize=(8,4))
+plt.bar(dates_printemps, printemps_2024, color='lightgreen')
+plt.title("Consommation printemps 2024")
+plt.xlabel("Mois")
+plt.ylabel("Valeur (TWh)")
+plt.grid(axis='y')
+plt.show()
+
+
+#Ete2024
+import matplotlib.pyplot as plt
+
+dates_ete = []
+ete_2024 = []
+
+for mois in ["06", "07", "08"]: 
+    for element in donnees[1:]:
+        date = element[0]
+        annee, m = date.split("-")
+        if annee == "2024" and m == mois:
+            dates_ete.append(date)
+            ete_2024.append(float(element[2].replace(",", ".")))
+
+plt.figure(figsize=(8,4))
+plt.bar(dates_ete, ete_2024, color='orange')
+plt.title("Consommation estivale 2024")
+plt.xlabel("Mois")
+plt.ylabel("Valeur (TWh)")
+plt.grid(axis='y')
+plt.show()
+
+
+#Automn2024
+import matplotlib.pyplot as plt
+
+dates_automne = []
+automne_2024 = []
+
+for mois in ["09", "10", "11"]:
+    for element in donnees[1:]:
+        date = element[0]
+        annee, m = date.split("-")
+        if annee == "2024" and m == mois:
+            dates_automne.append(date)
+            automne_2024.append(float(element[2].replace(",", ".")))
+
+plt.figure(figsize=(8,4))
+plt.bar(dates_automne, automne_2024, color='brown')
+plt.title("Consommation automne 2024")
+plt.xlabel("Mois")
+plt.ylabel("Valeur (TWh)")
+plt.grid(axis='y')
+plt.show()
+
+
+#Consommation en hiver, printemps, été, automne sur plusieurs années (2018-2020-2022-2024)
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+saison = ["12", "01", "02"]  # mois d'hiver
+annees = ["2018", "2020", "2022", "2024"]
+couleurs = ['skyblue', 'orange', 'lightgreen', 'pink']
+
+#valeurs brutes et corrigées pour chaque année
+valeurs_par_annee = []
+for annee in annees:
+    valeurs = []
+    for mois in saison:
+        somme_mois = 0
+        count = 0
+        for element in donnees[1:]:
+            date = element[0]
+            a, m = date.split("-")
+            if a == annee and m == mois:
+                somme_mois += float(element[2].replace(",", "."))
+                count += 1
+        #la moyenne valeurs brutes et corrigées par mois
+        if count > 0:
+            valeurs.append(somme_mois / count)
+        else:
+            valeurs.append(0)
+    valeurs_par_annee.append(valeurs)
+
+#barres par groupe
+x = np.arange(len(saison))  # positions des mois
+largeur = 0.2
+plt.figure(figsize=(10,5))
+for i, valeurs in enumerate(valeurs_par_annee):
+    plt.bar(x + i*largeur, valeurs, width=largeur, color=couleurs[i], label=annees[i])
+plt.xticks(x + largeur*1.5, ["Déc", "Jan", "Fév"])
+plt.title("Consommation hivernale (moyenne des valeurs brutes et corrigées par mois) pour 2018-2020-2022-2024")
+plt.xlabel("Mois")
+plt.ylabel("Valeur moyenne (TWh)")
+plt.legend()
+plt.grid(axis='y')
+plt.show()
+
+
+#Printemps
+import matplotlib.pyplot as plt
+import numpy as np
+
+saison = ["03", "04", "05"]  # mois de printemps
+annees = ["2018", "2020", "2022", "2024"]
+couleurs = ['skyblue', 'orange', 'lightgreen', 'pink']
+
+#valeurs brutes et corrigées pour chaque année
+valeurs_par_annee = []
+for annee in annees:
+    valeurs = []
+    for mois in saison:
+        somme_mois = 0
+        count = 0
+        for element in donnees[1:]:
+            date = element[0]
+            a, m = date.split("-")
+            if a == annee and m == mois:
+                somme_mois += float(element[2].replace(",", "."))
+                count += 1
+        # Moyenne brutes et corrigées par mois
+        if count > 0:
+            valeurs.append(somme_mois / count)
+        else:
+            valeurs.append(0)
+    valeurs_par_annee.append(valeurs)
+
+#barres par groupe
+x = np.arange(len(saison))  # positions des mois
+largeur = 0.2
+plt.figure(figsize=(10,5))
+for i, valeurs in enumerate(valeurs_par_annee):
+    plt.bar(x + i*largeur, valeurs, width=largeur, color=couleurs[i], label=annees[i])
+plt.xticks(x + largeur*1.5, ["Mars", "Avril", "Mai"])
+plt.title("Consommation printanière (moyenne des valeurs brutes et corrigées par mois) 2018-2020-2022-2024")
+plt.xlabel("Mois")
+plt.ylabel("Valeur moyenne (TWh)")
+plt.legend()
+plt.grid(axis='y')
+plt.show()
+
+
+#Été
+import matplotlib.pyplot as plt
+import numpy as np
+
+saison = ["06", "07", "08"]  # mois d'été
+annees = ["2018", "2020", "2022", "2024"]
+couleurs = ['skyblue', 'orange', 'lightgreen', 'pink']
+
+#valeurs brutes et corrigées pour chaque année
+valeurs_par_annee = []
+for annee in annees:
+    valeurs = []
+    for mois in saison:
+        somme_mois = 0
+        count = 0
+        for element in donnees[1:]:
+            date = element[0]
+            a, m = date.split("-")
+            if a == annee and m == mois:
+                somme_mois += float(element[2].replace(",", "."))
+                count += 1
+        # Moyenne des valeurs brutes et corrigées par mois
+        if count > 0:
+            valeurs.append(somme_mois / count)
+        else:
+            valeurs.append(0)
+    valeurs_par_annee.append(valeurs)
+
+
+x = np.arange(len(saison))  # positions des mois
+largeur = 0.2
+plt.figure(figsize=(10,5))
+for i, valeurs in enumerate(valeurs_par_annee):
+    plt.bar(x + i*largeur, valeurs, width=largeur, color=couleurs[i], label=annees[i])
+plt.xticks(x + largeur*1.5, ["Juin", "Juillet", "Août"])
+plt.title("Consommation estivale (moyenne des valeurs brutes et corrigées par mois) 2018-2020-2022-2024")
+plt.xlabel("Mois")
+plt.ylabel("Valeur moyenne (TWh)")
+plt.legend()
+plt.grid(axis='y')
+plt.show()
+
+
+# Automne
+import matplotlib.pyplot as plt
+import numpy as np
+
+saison = ["09", "10", "11"]  # mois d'automne
+annees = ["2018", "2020", "2022", "2024"]
+couleurs = ['skyblue', 'orange', 'lightgreen', 'pink']
+
+#les conso brutes et corrigées pour chaque année
+valeurs_par_annee = []
+
+for annee in annees:
+    valeurs = []
+    for mois in saison:
+        somme_mois = 0
+        count = 0
+        for element in donnees[1:]:
+            date = element[0]
+            a, m = date.split("-") #sépare la date
+            if a == annee and m == mois:
+                somme_mois += float(element[2].replace(",", "."))
+                count += 1
+        # Moyenne brute et corrigée par mois
+        if count > 0:
+            valeurs.append(somme_mois / count)
+        else:
+            valeurs.append(0)
+    valeurs_par_annee.append(valeurs)
+
+# Tracer barres groupées
+x = np.arange(len(saison))  #positions des mois
+largeur = 0.2
+
+plt.figure(figsize=(10,5))
+for i, valeurs in enumerate(valeurs_par_annee):
+    plt.bar(x + i*largeur, valeurs, width=largeur, color=couleurs[i], label=annees[i])
+
+plt.xticks(x + largeur*1.5, ["Septembre", "Octobre", "Novembre"])
+plt.title("Consommation automnale (moyenne des valeurs brutes et corrigées par mois) 2018-2020-2022-2024")
+plt.xlabel("Mois")
+plt.ylabel("Valeur moyenne (TWh)")
+plt.legend()
+plt.grid(axis='y')
+plt.show()
+
+
+#Consommation moyenne (brute et corrigée) annuelle de 1995 à 2025
+
+import matplotlib.pyplot as plt
+
+#Années de 1995 à 2025
+annees = [str(a) for a in range(1995, 2026)]#convertit en str
+consommation = []
+
+for annee in annees:
+    total = 0
+    count = 0
+    for element in donnees[1:]:
+        date = element[0]
+        a, m = date.split("-")
+        if a == annee:
+            total += float(element[2].replace(",", "."))
+            count += 1
+    if count > 0:
+        consommation.append(total / count)  #moyenne valeurs brutes et corrigées par année
+    else:
+        consommation.append(0)
+
+# Histogramme
+plt.figure(figsize=(12,5))
+plt.bar(annees, consommation, color='skyblue')
+plt.xticks(rotation=45)
+plt.title("Consommation annuelle 1995-2025 (moyenne des valeurs brutes et corrigées)")
+plt.xlabel("Année")
+plt.ylabel("Valeur moyenne (TWh)")
+plt.grid(axis='y')
+plt.show()
+
+
+
 
 
 
